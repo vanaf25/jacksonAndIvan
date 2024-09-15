@@ -1,17 +1,11 @@
-import ProductionSidebar from '../../components/productionManager/ProductionSidebar';
 import ServiceCall from '../../components/productionManager/ServiceCall';
-import MainLayout from '../../components/global/MainLayout';
-
-import styles from '../../styles/Main.module.scss';
+import ProductionLayout from "./ProductionLayout";
 
 const ProductionService = () => {
   return (
-    <div className={styles.gridFlex}>
-      <ProductionSidebar />
-      <MainLayout>
-        <ServiceCall />
-      </MainLayout>
-    </div>
+ <ProductionLayout>
+   <ServiceCall />
+ </ProductionLayout>
   );
 };
 

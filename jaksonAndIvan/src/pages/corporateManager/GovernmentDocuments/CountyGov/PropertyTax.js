@@ -1,17 +1,11 @@
-import CorporateSidebar from '../../../../components/corporateManager/CorporateSidebar';
 import PropertyTax from '../../../../components/corporateManager/GovernmentDocuments/CountyGov/PropertyTax';
-import MainLayout from '../../../../components/global/MainLayout';
-
-import styles from '../../../../styles/Main.module.scss';
+import CorporateLayout from "../../CorporateLayout";
 
 const PropertyTaxComponent = () => {
   return (
-    <div className={styles.gridFlex}>
-      <CorporateSidebar />
-      <MainLayout>
-        <PropertyTax />
-      </MainLayout>
-    </div>
+    <CorporateLayout>
+      <PropertyTax />
+    </CorporateLayout>
   );
 };
 

@@ -1,17 +1,11 @@
-import SalesSidebar from '../../components/salesManager/salesSidebar';
 import Presentations from '../../components/salesManager/SalesPresentations';
-import MainLayout from '../../components/global/MainLayout';
-
-import styles from '../../styles/Main.module.scss';
+import SalesLayout from "./SalesManager";
 
 const SalesPresentations = () => {
   return (
-    <div className={styles.gridFlex}>
-      <SalesSidebar />
-      <MainLayout>
-        <Presentations />
-      </MainLayout>
-    </div>
+    <SalesLayout>
+      <Presentations />
+    </SalesLayout>
   );
 };
 

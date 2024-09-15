@@ -1,39 +1,26 @@
-import { useState, useCallback } from 'react';
-import { Link, Redirect } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-
+// SignIn.js
+import { useDispatch, useSelector } from 'react-redux';
+import {Link, Redirect} from 'react-router-dom';
 import { signIn } from '../../redux/actions/authAction';
-
 import styles from './Auth.module.scss';
-
-const creds = {
-  email: '',
-  password: '',
-};
-
+import {validateForm} from "../../utils/authValidation";
+import useForm from "../../hooks/useForm";
+import InputField from "../../components/global/InputField/InputField";
 const SignIn = () => {
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.auth);
 
-  const [input, setInput] = useState(creds);
-
-  const changeHandler = useCallback(
-    (e) => {
-      setInput({
-        ...input,
-        [e.target.name]: e.target.value,
-      });
-    },
-    [input],
-  );
-
-  const handleSubmit = useCallback(
-    (e) => {
-      e.preventDefault();
+  const onSubmit = (input) => {
+    const { isValid, errors } = validateForm(input);
+    if (isValid) {
       dispatch(signIn(input));
-      setInput(creds);
-    },
-    [input],
+    }
+    return { isValid, errors };
+  };
+
+  const { input, errors, handleChange, handleSubmit } = useForm(
+    { email: '', password: '' },
+    onSubmit,
   );
 
   if (auth.user?.id) return <Redirect to="/" />;
@@ -43,29 +30,21 @@ const SignIn = () => {
       <div className={styles.container}>
         <div className={styles.card}>
           <div className={styles.innerCard}>
-            <div className={styles.authList}>
-              <label htmlFor="email" className={styles.title}>
-                Email <span className={styles.required}>*</span>
-              </label>
-              <input
-                className={styles.input}
-                name="email"
-                value={input.email}
-                onChange={changeHandler}
-              />
-            </div>
-            <div className={styles.authList}>
-              <label htmlFor="password" className={styles.title}>
-                Password <span className={styles.required}>*</span>
-              </label>
-              <input
-                className={styles.input}
-                name="password"
-                type="password"
-                value={input.password}
-                onChange={changeHandler}
-              />
-            </div>
+            <InputField
+              label="Email"
+              name="email"
+              value={input.email}
+              onChange={handleChange}
+              error={errors.email}
+            />
+            <InputField
+              label="Password"
+              name="password"
+              type="password"
+              value={input.password}
+              onChange={handleChange}
+              error={errors.password}
+            />
           </div>
           <button type="submit" className={styles.button}>
             Login

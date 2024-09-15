@@ -1,17 +1,11 @@
-import OfficeSidebar from '../../components/officeManager/OfficeSidebar';
 import EquipmentInventory from '../../components/officeManager/EquipmentInventory';
-import MainLayout from '../../components/global/MainLayout';
-
-import styles from '../../styles/Main.module.scss';
+import OfficeLayout from "./officeLayout";
 
 const OfficeEquipment = () => {
   return (
-    <div className={styles.gridFlex}>
-      <OfficeSidebar />
-      <MainLayout>
-        <EquipmentInventory />
-      </MainLayout>
-    </div>
+  <OfficeLayout>
+    <EquipmentInventory />
+  </OfficeLayout>
   );
 };
 

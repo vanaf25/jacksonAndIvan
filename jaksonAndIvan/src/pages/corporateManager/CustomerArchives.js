@@ -1,17 +1,11 @@
-import CorporateSidebar from '../../components/corporateManager/CorporateSidebar';
-import CustomerArchivesSystem from '../../components/corporateManager/CustomerArchives';
-import MainLayout from '../../components/global/MainLayout';
-
-import styles from '../../styles/Main.module.scss';
+import CorporateLayout from "./CorporateLayout";
+import CustomerArchivesSystem from "../../components/corporateManager/CustomerArchives";
 
 const CustomerArchives = () => {
   return (
-    <div className={styles.gridFlex}>
-      <CorporateSidebar />
-      <MainLayout>
-        <CustomerArchivesSystem />
-      </MainLayout>
-    </div>
+    <CorporateLayout>
+      <CustomerArchivesSystem />
+    </CorporateLayout>
   );
 };
 

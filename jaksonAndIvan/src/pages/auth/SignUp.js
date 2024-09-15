@@ -1,12 +1,13 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { Link, Redirect, useHistory } from 'react-router-dom';
-import Select from 'react-select';
-
+// SignUp.js
+import { useDispatch, useSelector } from 'react-redux';
+import { Redirect, useHistory } from 'react-router-dom';
 import { signUp } from '../../redux/actions/authAction';
-
+import Select from 'react-select';
 import styles from './Auth.module.scss';
-
+import {validateForm} from "../../utils/authValidation";
+import useForm from "../../hooks/useForm";
+import {useState} from "react";
+import InputField from "../../components/global/InputField/InputField";
 const customStyles = {
   container: (provided) => ({
     ...provided,
@@ -50,102 +51,27 @@ const options = [
   { value: 'corporate', label: 'Corporate Manager' },
 ];
 
-const user = {
-  email: '',
-  password: '',
-  confirmPw: '',
-};
-
 const SignUp = () => {
-  const history = useHistory();
   const dispatch = useDispatch();
+  const history = useHistory();
   const auth = useSelector((state) => state.auth);
 
-  const [input, setInput] = useState(user);
-  const [selectedRole, setSelectedRole] = useState('office');
-  const [errors, setErrors] = useState({});
-
-  useEffect(() => {
-    const tick = setTimeout(() => {
-      setErrors({});
-    }, 4000);
-
-    return () => clearTimeout(tick);
-  }, [errors]);
-
-  const validate = useCallback((data) => {
-    const error = {};
-    let isValid = true;
-
-    if (typeof data.email !== 'undefined') {
-      const pattern = new RegExp(
-        /^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i,
-      );
-
-      if (!pattern.test(data.email)) {
-        isValid = false;
-        error.email = 'Please enter a valid email address.';
-      }
+  const onSubmit = (input) => {
+    const { isValid, errors } = validateForm(input);
+    if (isValid) {
+      dispatch(signUp({ email: input.email,
+        password: input.password, role: selectedRole, status: 'pending' }));
+      history.push('/sign-in');
     }
+    return { isValid, errors };
+  };
 
-    if (!data.password) {
-      isValid = false;
-      error.password = 'Password is required.';
-    }
-
-    if (!data.confirmPw) {
-      isValid = false;
-      error.confirmPw = 'Retype a password again.';
-    }
-
-    if (data.password && data.confirmPw && data.password !== data.confirmPw) {
-      isValid = false;
-      error.match = 'Passwords did not match.';
-    }
-
-    setErrors({
-      error,
-    });
-
-    return isValid;
-  }, []);
-
-  const selectHandler = useCallback((data) => {
-    setSelectedRole(data.value);
-  }, []);
-
-  const changeHandler = useCallback(
-    (e) => {
-      setInput({
-        ...input,
-        [e.target.name]: e.target.value,
-      });
-      e.preventDefault();
-    },
-    [input],
+  const { input, errors, handleChange, handleSubmit } = useForm(
+    { email: '', password: '', confirmPw: '' },
+    onSubmit,
   );
 
-  const handleSubmit = useCallback(
-    (e) => {
-      e.preventDefault();
-
-      const isValid = validate(input);
-
-      if (isValid) {
-        dispatch(
-          signUp({
-            email: input.email,
-            password: input.password,
-            role: selectedRole,
-            status: 'pending',
-          }),
-        );
-        setInput(user);
-        history.push('/sign-in');
-      }
-    },
-    [input, selectedRole, history, validate],
-  );
+  const [selectedRole, setSelectedRole] = useState(options[0].value);
 
   if (auth.user?.status === 'approved') return <Redirect to="/" />;
 
@@ -159,76 +85,44 @@ const SignUp = () => {
                 Select a role
               </label>
               <Select
-                defaultValue={options[0]}
-                name="role"
-                onChange={selectHandler}
                 styles={customStyles}
                 options={options}
+                name="role"
+                defaultValue={options[0]}
                 components={{
                   IndicatorSeparator: () => null,
                 }}
+                onChange={(selected) => setSelectedRole(selected.value)}
               />
             </div>
-            <div>
-              <div className={styles.authList}>
-                <label htmlFor="email" className={styles.title}>
-                  Email <span className={styles.required}>*</span>
-                </label>
-                <input
-                  className={styles.input}
-                  type="email"
-                  name="email"
-                  value={input.email}
-                  onChange={changeHandler}
-                />
-              </div>
-              {errors?.error?.email && <p className={styles.alertTxt}>{errors.error.email}</p>}
-            </div>
-            <div>
-              <div className={styles.authList}>
-                <label htmlFor="password" className={styles.title}>
-                  Password <span className={styles.required}>*</span>
-                </label>
-                <input
-                  className={styles.input}
-                  type="password"
-                  name="password"
-                  value={input.password}
-                  onChange={changeHandler}
-                />
-              </div>
-              {errors?.error?.password && (
-                <p className={styles.alertTxt}>{errors.error.password}</p>
-              )}
-            </div>
-            <div>
-              <div className={styles.authList}>
-                <label htmlFor="confirmPw" className={styles.title}>
-                  Confirm Password <span className={styles.required}>*</span>
-                </label>
-                <input
-                  className={styles.input}
-                  type="password"
-                  name="confirmPw"
-                  value={input.confirmPw}
-                  onChange={changeHandler}
-                />
-              </div>
-              {errors?.error?.confirmPw && (
-                <p className={styles.alertTxt}>{errors.error.confirmPw}</p>
-              )}
-              {errors?.error?.match && <p className={styles.alertTxt}>{errors.error.match}</p>}
-            </div>
+
+            <InputField
+              label="Email"
+              name="email"
+              value={input.email}
+              onChange={handleChange}
+              error={errors.email}
+            />
+            <InputField
+              label="Password"
+              name="password"
+              type="password"
+              value={input.password}
+              onChange={handleChange}
+              error={errors.password}
+            />
+            <InputField
+              label="Confirm Password"
+              name="confirmPw"
+              type="password"
+              value={input.confirmPw}
+              onChange={handleChange}
+              error={errors.match || errors.confirmPw}
+            />
           </div>
           <button type="submit" className={styles.button}>
             Create an account
           </button>
-          <div className={styles.signInSection}>
-            Already have an account? &nbsp;
-            <Link to="/sign-in" className={styles.signIn}>
-              Sign In
-            </Link>
-          </div>
         </div>
       </div>
     </form>

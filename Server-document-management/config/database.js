@@ -30,7 +30,7 @@ if (process.env.NODE_ENV === 'production') {
     .catch((error) => console.error('Database connection failed:', error.message));
 } else {
   mongoose
-    .connect(devConnection, {
+    .connect(prodConnection, {
       useNewUrlParser: true,
       useCreateIndex: true,
       useUnifiedTopology: true,

@@ -1,17 +1,11 @@
-import CorporateSidebar from '../../components/corporateManager/CorporateSidebar';
 import TrainingSystem from '../../components/corporateManager/Training';
-import MainLayout from '../../components/global/MainLayout';
-
-import styles from '../../styles/Main.module.scss';
+import CorporateLayout from "./CorporateLayout";
 
 const Training = () => {
   return (
-    <div className={styles.gridFlex}>
-      <CorporateSidebar />
-      <MainLayout>
-        <TrainingSystem />
-      </MainLayout>
-    </div>
+    <CorporateLayout>
+      <TrainingSystem />
+    </CorporateLayout>
   );
 };
 

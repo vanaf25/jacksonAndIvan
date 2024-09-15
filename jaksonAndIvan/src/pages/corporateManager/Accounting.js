@@ -1,17 +1,11 @@
-import CorporateSidebar from '../../components/corporateManager/CorporateSidebar';
 import AccountingSystem from '../../components/corporateManager/Accounting';
-import MainLayout from '../../components/global/MainLayout';
-
-import styles from '../../styles/Main.module.scss';
+import CorporateLayout from "./CorporateLayout";
 
 const Accounting = () => {
   return (
-    <div className={styles.gridFlex}>
-      <CorporateSidebar />
-      <MainLayout>
-        <AccountingSystem />
-      </MainLayout>
-    </div>
+    <CorporateLayout>
+      <AccountingSystem />
+    </CorporateLayout>
   );
 };
 

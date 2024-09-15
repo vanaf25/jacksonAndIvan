@@ -1,17 +1,11 @@
-import CorporateSidebar from '../../../../components/corporateManager/CorporateSidebar';
 import Secretary from '../../../../components/corporateManager/GovernmentDocuments/StateGov/Secretary';
-import MainLayout from '../../../../components/global/MainLayout';
-
-import styles from '../../../../styles/Main.module.scss';
+import CorporateLayout from "../../CorporateLayout";
 
 const SecretaryComponent = () => {
   return (
-    <div className={styles.gridFlex}>
-      <CorporateSidebar />
-      <MainLayout>
-        <Secretary />
-      </MainLayout>
-    </div>
+    <CorporateLayout>
+      <Secretary />
+    </CorporateLayout>
   );
 };
 

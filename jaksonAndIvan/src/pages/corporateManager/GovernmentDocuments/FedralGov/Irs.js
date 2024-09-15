@@ -1,17 +1,11 @@
-import CorporateSidebar from '../../../../components/corporateManager/CorporateSidebar';
 import Irs from '../../../../components/corporateManager/GovernmentDocuments/FedralGov/Irs';
-import MainLayout from '../../../../components/global/MainLayout';
-
-import styles from '../../../../styles/Main.module.scss';
+import CorporateLayout from "../../CorporateLayout";
 
 const IrsComponent = () => {
   return (
-    <div className={styles.gridFlex}>
-      <CorporateSidebar />
-      <MainLayout>
-        <Irs />
-      </MainLayout>
-    </div>
+<CorporateLayout>
+  <Irs />
+</CorporateLayout>
   );
 };
 
