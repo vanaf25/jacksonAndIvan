@@ -15,7 +15,10 @@ function MyApp({
       supabaseClient={supabaseClient}
       initialSession={pageProps.initialSession}
     >
-      <Component {...pageProps} />
+        <>
+            {//@ts-ignore
+            <Component {...pageProps} />}
+        </>
     </SessionContextProvider>
   )
 }
