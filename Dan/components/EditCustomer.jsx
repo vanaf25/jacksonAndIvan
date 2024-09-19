@@ -1,52 +1,63 @@
 import React, { useState } from 'react';
-import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react"
+import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
+import FormInput from "./common/InputField";
 
 export default function EditCustomer({ customer, onClose }) {
-  const supabase = useSupabaseClient();
-  const [name, setName] = useState(customer.name);
-  const [address, setAddress] = useState(customer.address);
-  const [city, setCity] = useState(customer.city);
-  const [state, setState] = useState(customer.state);
-  const [zip, setZip] = useState(customer.zip);
-  const [email, setEmail] = useState(customer.email);
-  const [phone, setPhone] = useState(customer.phone);
+    const supabase = useSupabaseClient();
+    const [formData, setFormData] = useState({
+        name: customer.name,
+        address: customer.address,
+        city: customer.city,
+        state: customer.state,
+        zip: customer.zip,
+        email: customer.email,
+        phone: customer.phone,
+    });
 
-  async function handleSubmit(e) {
-    e.preventDefault();
-    try {
-      const { error } = await supabase
-        .from('customers')
-        .update({ name, address, city, state, zip, email, phone })
-        .eq('id', customer.id);
-      if (error) throw error;
-      onClose();
-    } catch (error) {
-      console.error(error);
-      alert('Error updating customer');
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prevData) => ({ ...prevData, [name]: value }));
+    };
+
+    async function handleSubmit(e) {
+        e.preventDefault();
+        try {
+            const { error } = await supabase
+                .from('customers')
+                .update(formData)
+                .eq('id', customer.id);
+            if (error) throw error;
+            onClose();
+        } catch (error) {
+            console.error(error);
+            alert('Error updating customer');
+        }
     }
-  }
 
-  return (
-    <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
-
-        <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-
-
-        <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} />
-
-
-        <input type="text" value={city} onChange={(e) => setCity(e.target.value)} />
-
-        <input type="text" value={state} onChange={(e) => setState(e.target.value)} />
-
-        <input type="text" value={zip} onChange={(e) => setZip(e.target.value)} />
-
-        <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} />
-
-        <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} />
-
-      <button type="submit">Save</button>
-      <button type="button" onClick={onClose}>Cancel</button>
-    </form>
-  );
+    const inputFields = [
+        { label: "Name", name: "name" },
+        { label: "Address", name: "address" },
+        { label: "City", name: "city" },
+        { label: "State", name: "state" },
+        { label: "ZIP", name: "zip" },
+        { label: "Email", name: "email" },
+        { label: "Phone", name: "phone" },
+    ];
+    return (
+        <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
+            {inputFields.map(({ label, name }) => (
+                <div key={name}>
+                    <label>{label}</label>
+                    <input
+                        type="text"
+                        name={name}
+                        value={formData[name]}
+                        onChange={handleChange}
+                    />
+                </div>
+            ))}
+            <button type="submit">Save</button>
+            <button type="button" onClick={onClose}>Cancel</button>
+        </form>
+    );
 }

@@ -31,7 +31,6 @@ const types = ['Clients', 'Documents'];
 
 export default function DashboardTabs(props) {
   const [active, setActive] = useState(types[0]);
-
   function tabSwticher(){
     switch(active){
         case 'Clients': return <Customers username={props.username} company={props.company} customers={props.customers} documents={props.documents} setCustomerData={props.setCustomerData} companyPhone={props.companyPhone} companyEmail={props.companyEmail} companyAddress={props.companyAddress} />;
@@ -39,7 +38,8 @@ export default function DashboardTabs(props) {
         default: return <Dashboard username={props.username} company={props.company} customers={props.customers} documents={props.documents} setCustomerData={props.setCustomerData} companyPhone={props.companyPhone} companyEmail={props.companyEmail} companyAddress={props.companyAddress} />
     }
   }
-  
+
+  console.log('cactive:',active);
   return (
     <div className='w-full'>
       <div style={buttonGroupStyles}>

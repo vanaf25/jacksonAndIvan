@@ -13,8 +13,10 @@ export default function Dashboard(props) {
   // console.log("cust", customers);
   // console.log("user", username);
   const [createVisible, setCreateVisible] = useState(false)
-  const [viewDocVisible, setViewDocVisible] = useState(null)
-
+  const [viewDocVisible, setViewDocVisible] = useState(false);
+    useEffect(()=>{
+        console.log('viewDocVisible:',viewDocVisible);
+    },[viewDocVisible])
   const sortedDocuments = props.documents ? props.documents.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)) : []
   
 
@@ -41,7 +43,7 @@ export default function Dashboard(props) {
                    View document
                  </button>
              </div>
-              {viewDocVisible == document.created_at && <DashboardViewDoc options={document.fields}  signee={props.username} company={document.company} client={document.client} setDocVisible={setViewDocVisible} address={document.address} customer={props.customers.find(c => c.client_id === document.client_id)} service={document.service} totalPrice={document.totalPrice} companyPhone={props.companyPhone} companyEmail={props.companyEmail} companyAddress={props.companyAddress}/>}
+              {viewDocVisible === document.created_at && <DashboardViewDoc options={document.fields} signee={props.username} company={document.company} client={document.client} setDocVisible={setViewDocVisible} address={document.address} customer={props.customers.find(c => c.client_id === document.client_id)} service={document.service} totalPrice={document.totalPrice} companyPhone={props.companyPhone} companyEmail={props.companyEmail} companyAddress={props.companyAddress}/>}
               </>
           ) )
         ) : (

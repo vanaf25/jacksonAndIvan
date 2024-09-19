@@ -1,10 +1,12 @@
 
 import React, {useState, useEffect} from "react";
 import {contractData} from "../contractData"
+import CustomerDetails from "../CustomerDetails/CustomerDetails";
+import EstimatorDetails from "../EstimatorDetails/EstimatorDetails";
 
 
 
-export default function ViewContract(props) {
+export default function ViewContract({signee,companyPhone,companyEmail,...props}) {
   const [selectedTermsData, setSelectedTermsData] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -34,22 +36,8 @@ export default function ViewContract(props) {
      <div className="z-[200] w-screen min-h-screen bg-slate-100 absolute top-0 left-0">
      <div className="flex justify-center flex-col p-12 gap-8 max-w-[92rem] mx-auto">
       <div className="flex gap-8">
-        <div>
-          <h3>Customer info</h3>
-          <p>Name: {props.customer.name}</p>
-          <p>Address: {props.customer.address}</p>
-          <p>Phone: {props.customer.phone}</p>
-          <p>Email: {props.customer.email}</p>
-
-
-        </div>
-        <div>
-          <h3>Estimator info</h3>
-          <p>Name: {props.signee}</p>
-          <p>Phone: {props.companyPhone}</p>
-          <p>Email: {props.companyEmail}</p>
-
-        </div>
+        <CustomerDetails customer={props.customer}/>
+          <EstimatorDetails estimatorDetails={{signee,companyPhone,companyEmail}} />
       </div>
 
       <div>

@@ -1,40 +1,24 @@
 
 import React, {useState, useEffect} from "react";
+import EstimatorDetails from "../EstimatorDetails/EstimatorDetails";
+import CustomerDetails from "../CustomerDetails/CustomerDetails";
 
 
 
 
-export default function ViewQuote(props) {
+export default function ViewQuote({customer,signee,companyPhone,companyEmail,...props}) {
   let totalPrice = 0;
-
-
+    console.log('render quote component:',props);
 
 
   return (
-    
      <div className="z-[200] w-full h-full bg-slate-100 absolute top-0 left-0">
      <div className="flex justify-center flex-col p-12 gap-8 max-w-[92rem] mx-auto">
       <div className="flex gap-8">
-        <div className="w-full">
-          <h3>Customer info</h3>
-          <p>Name: {props.customer.name}</p>
-          <p>Address: {props.customer.address}</p>
-          <p>{props.customer.city}, {props.customer.state}. {props.customer.zip}</p>
-          <p>Phone: {props.customer.phone}</p>
-          <p>Email: {props.customer.email}</p>
-
-
-        </div>
-        <div className="w-full">
-          <h3>Estimator info</h3>
-          <p>Name: {props.signee}</p>
-          <p>Phone: {props.companyPhone}</p>
-          <p>Email: {props.companyEmail}</p>
-
-        </div>
+          <CustomerDetails className={"w-full"} customer={customer}/>
+          <EstimatorDetails className={"w-full"}
+              estimatorDetails={{signee,companyPhone,companyEmail}}/>
       </div>
-
-
       <h3 className="text-center text-xl">Proposed Work Scope</h3>
       <>
 
@@ -47,7 +31,6 @@ export default function ViewQuote(props) {
         ))
        }
        </>
-
        <>
 
 {props.customFields && 
@@ -62,10 +45,8 @@ export default function ViewQuote(props) {
 }
 </>
 }
-</> 
-
-
-       <table className="table-auto border-collapse border border-slate-500">
+</>
+         <table className="table-auto border-collapse border border-slate-500">
         <thead>
         <tr>
       <th>Product Description</th>
@@ -100,10 +81,6 @@ export default function ViewQuote(props) {
        </tr>
         </tbody>
         </table>
-
- 
-       
-
       <div className="flex flex-col gap-10 my-6">
         {props.notes && 
        <div className="p-4"><p>Extra Information: {props.notes}</p></div>
@@ -116,18 +93,15 @@ export default function ViewQuote(props) {
        </div>
        <button
          className="print:hidden"
-         onClick={() => props.setDocVisible(false) & props.setCreateVisible(false) & window.location.reload(false)}
+         onClick={() =>{
+             props.setDocVisible(false);
+             props.setCreateVisible(false);
+         } }
        >
         Close
        </button>
          </div>
     </div>
-      
 
-
-  
   )
-
-  
-
 }

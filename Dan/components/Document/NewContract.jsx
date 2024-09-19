@@ -21,11 +21,8 @@ export default function NewContract(props) {
   const [loading, setLoading] = useState(false);
   const supabase = useSupabaseClient()
   const user = useUser()
-  const [jobNotes, setJobNotes] = useState(''); 
-
-
-console.log(props.lineItems, props.customFields)
-
+  const [jobNotes, setJobNotes] = useState('');
+  console.log(props.lineItems, props.customFields)
   async function addDocument() {
     try {
       // Get the authenticated use
@@ -49,22 +46,15 @@ console.log(props.lineItems, props.customFields)
       console.error('Error adding document', error)
     }
   }
-
   useEffect(() => {
-    
     let serviceTerms = Array.from(contractData).filter((service) => {
       console.log(service, props.service)
       return service.name === props.service;
     });
     setSelectedTermsData(serviceTerms[0].terms);
     console.log("st", serviceTerms[0].terms)
-
     setLoading(true);
-
-
 }, []);
-
-
   return (
     <>
       <div className="z-[100] w-screen h-screen bg-slate-100 absolute top-0 left-0">
@@ -97,7 +87,6 @@ console.log(props.lineItems, props.customFields)
             onChange={(e) => setJobNotes(e.target.value)}
           />
               </div>
-
               <button
                 className="bg-green-200"
                 onClick={() =>  addDocument() & setDocVisible(true)}
@@ -109,13 +98,10 @@ console.log(props.lineItems, props.customFields)
         </div>
         </div>
       </div>
-
     { docVisible && (
       <ViewContract lineItems={props.lineItems} notes={props.notes} customFields={props.customFields} options={props.options} signee={props.signee} company={props.company} customer={props.customer} address={props.address} setCreateVisible={props.setCreateVisible} setDocVisible={setDocVisible} setCustomerData={props.setCustomerData} terms={selectedTermsData} service={props.service} totalPrice={totalPrice} companyPhone={props.companyPhone} companyEmail={props.companyEmail} companyAddress={props.companyAddress} />
       )
-
     }
-
       </>
   )
 }

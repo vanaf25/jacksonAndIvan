@@ -23,7 +23,7 @@ export default function NewQuote(props) {
   const [lineItems, setLineItems] = useState([{ description: '', price: '' }]); 
   const supabase = useSupabaseClient()
   const user = useUser()
-
+  console.log('Quote component render!');
 
   console.log(props.customer)
 

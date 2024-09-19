@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { useState } from "react"
 import NewQuote from "./Document/NewQuote"
 import ViewQuote from "./Document/ViewQuote";
@@ -9,10 +9,11 @@ import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react"
 import { FontAwesomeIcon, faCircleUser } from '@fortawesome/react-fontawesome'
 import { faPhone, faEnvelope,faHouse, faToolbox, faPencil } from '@fortawesome/free-solid-svg-icons'
 import EditCustomer from './EditCustomer';
-
+import InputField from './common/InputField'
 
 
 export default function Customers(props) {
+  console.log('custom render!');
   const supabase = useSupabaseClient()
   const user = useUser()
 
@@ -21,80 +22,93 @@ export default function Customers(props) {
   // console.log("cust", customers);
   // console.log("user", username);
   const [createVisible, setCreateVisible] = useState()
+  console.log('createVisible:',createVisible);
   const [progressDoc, setProgressDoc] = useState()
   const [viewDocVisible, setViewDocVisible] = useState(null)
+  console.log('view:',viewDocVisible);
   const [instructionsDocVisible, setInstructionsDocVisible] = useState(null)
-
-  const [addModal, setAddModal] = useState(false)
-  const [name, setName] = useState(null)
-  const [address, setAddress] = useState(null)
-  const [city, setCity] = useState(null)
-  const [state, setState] = useState(null)
-  const [zip, setZip] = useState(null)
-  const [email, setEmail] = useState(null)
-  const [phone, setPhone] = useState(null)
   const [editCustomer, setEditCustomer] = useState(null);
 
+  const [addModal, setAddModal] = useState(false)
+  const [customerDetails, setCustomerDetails] = useState({
+    name: null,
+    address: null,
+    city: null,
+    state: null,
+    zip: null,
+    email: null,
+    phone: null,
+  });
 
+  const inputs = [
+    { id: "name", label: "Name", type: "text", autoComplete: "name" },
+    { id: "email", label: "Email", type: "text" },
+    { id: "phone", label: "Phone", type: "tel", pattern: "[0-9]{3}-[0-9]{2}-[0-9]{3}" },
+    { id: "address", label: "Address", type: "text", autoComplete: "street-address" },
+    { id: "city", label: "City", type: "text" },
+    { id: "state", label: "State", type: "text" },
+    { id: "zip", label: "Zip", type: "text" },
+
+  ];
+  const handleChange = (id, value) => {
+    setCustomerDetails(prevDetails => ({
+      ...prevDetails,
+      [id]: value,
+    }));
+  };
   function handleEditCustomer(customer) {
     setEditCustomer(customer.client_id);
   }
 
+  useEffect(() => {
+    console.log('Customer component render!');
+  }, []);
   function handleCloseEdit() {
     setEditCustomer(null);
   }
-
-
-
-
-    name, address, city, state, email, phone
-
-
   async function addCustomer() {
     try {
-      // Get the authenticated use
-  
-      // Insert a new document into the database
       const { data, error } = await supabase
-        .from('customers')
-        .insert([{ created_by: user.id, name: name, address: address, city: city, state: state, zip: zip, email: email, phone: phone}])
-        .single()
-  
-      if (error) {
-        throw error
-      }
-      setAddModal(false)
-      setName(null)
-      setAddress(null)
-      setCity(null)
-      setState(null)
-      setZip(null)
-      setEmail(null)
-      setPhone(null)
-      alert("Client added")
-      // Add the new document to the list of documents
-      // setCustomers([...customers, data])
-      // props.setCreateVisible(false)
+          .from('customers')
+          .insert([{
+            created_by: user.id,
+            ...customerDetails
+          }])
+          .single();
+
+      if (error) throw error;
+
+      // Reset form
+      setCustomerDetails({
+        name: null,
+        address: null,
+        city: null,
+        state: null,
+        zip: null,
+        email: null,
+        phone: null,
+      });
+
+      alert("Client added");
     } catch (error) {
-      alert("Error adding client")
-      console.error('Error adding customer', error)
+      alert("Error adding client");
+      console.error('Error adding customer', error);
     }
   }
-
   async function removeCustomer(id) {
     const shouldDelete = window.confirm("Are you sure you want to delete this customer?");
     if (!shouldDelete) return;
-  
+
     try {
       const { data, error } = await supabase
         .from('customers')
         .delete()
         .eq('id', id);
-  
+
       if (error) {
         throw error;
       }
-  
+
       alert(`Customer with ID ${id} has been deleted.`);
       // Refresh the list of customers by fetching the data again
     } catch (error) {
@@ -115,8 +129,8 @@ export default function Customers(props) {
       <h3 className="text-2xl text-slate-600">Welcome, click the <FontAwesomeIcon icon={faCircleUser}/> icon in the top left to setup your account.</h3>
       )
     }
-    
- 
+
+
     </div>
     <>
     <div className="flex gap-4">
@@ -136,75 +150,13 @@ export default function Customers(props) {
     {
       addModal && (
         <>
-
-       <div>
-        <label htmlFor="name">Name</label>
-        <input
-          id="name"
-          type="text"
-          autocomplete="name"
-          value={name || ""}
-          onChange={e => setName(e.target.value)}
-        />
-      </div>
-      <div>
-        <label htmlFor="email">Email</label>
-        <input
-          id="email"
-          type="text"
-          value={email || ""}
-          onChange={e => setEmail(e.target.value)}
-        />
-      </div>
-      <div>
-        <label htmlFor="phone">Phone</label>
-        <input
-          id="phone"
-          type="tel"
-          pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
-          value={phone || ""}
-          onChange={e => setPhone(e.target.value)}
-        />
-      </div>
-      <div>
-        <label htmlFor="address">Address</label>
-        <input
-          id="address"
-          type="text"
-          autocomplete="street-address"
-          value={address || ""}
-          onChange={e => setAddress(e.target.value)}
-        />
-      </div>
-      <div>
-        <label htmlFor="city">City</label>
-        <input
-          id="city"
-          type="text"
-          value={city || ""}
-          onChange={e => setCity(e.target.value)}
-        />
-      </div>
-      <div>
-        <label htmlFor="state">State</label>
-        <input
-          id="state"
-          type="text"
-          value={state || ""}
-          onChange={e => setState(e.target.value)}
-        />
-      </div>
-      <div>
-        <label htmlFor="zip">Zip</label>
-        <input
-          id="zip"
-          type="text"
-          maxlength="5"
-          size="5"
-          value={zip || ""}
-          onChange={e => setZip(e.target.value)}
-        />
-      </div>
+          {inputs.map(({ id, label, type, autoComplete, pattern }) => (
+               <InputField
+                  onChange={e => handleChange(id, e.target.value)}
+                  label={label} id={id} type={type}  autoComplete={autoComplete}
+                  pattern={pattern}
+                  value={customerDetails[id] || ""} />
+          ))}
       <button
          className="bg-green-200"
          onClick={() => addCustomer()}
@@ -217,7 +169,9 @@ export default function Customers(props) {
       {props.customers ? (
         <>
         <div className="w-full gap-2 flex flex-col">
-          {Object.values(props.customers).sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).map(customer => (
+          {Object.values(props.customers)
+              .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+              .map(customer => (
             <>
               <div
               className="w-full p-12 border-solid border border-slate-600 rounded-xl my-10"
@@ -240,7 +194,7 @@ export default function Customers(props) {
                     </div>
                   )
                   }
-             
+
                  <div className="flex gap-4 items-end">
                  <p className="text-2xl mt-8">Quotes:</p>
                   <button
@@ -266,47 +220,47 @@ export default function Customers(props) {
                                <p className="text-md"><span>{new Date(document.created_at).toDateString()}</span><span> {new Date(document.created_at).toLocaleTimeString(navigator.language, {hour: '2-digit', minute:'2-digit'})}</span></p>
                                <div className="flex gap-1">
                                <button
-                                    onClick={() => setViewDocVisible(document.created_at)}
+                                    onClick={() => setViewDocVisible(document.id)}
                                     className="bg-green-200"
                                   >
                                     View
                                   </button>
                                  <button
-                                    onClick={() => setProgressDoc(document.created_at)}
+                                    onClick={() => setProgressDoc(document.id)}
                                     className="bg-green-200"
                                   >
                                     New Contract
                                   </button>
                                   </div>
-                               {viewDocVisible == document.created_at && <ViewQuote lineItems={document.line_items} customFields={document.custom_fields} options={document.fields} signee={props.username} company={props.company} customer={customer} address={props.address} setCreateVisible={setCreateVisible} setDocVisible={setViewDocVisible} service={document.service} notes={document.notes} companyPhone={props.companyPhone} companyEmail={props.companyEmail} companyAddress={props.companyAddress} />}
-                               {progressDoc == document.created_at && <NewContract options={document.fields} type={document.type}  signee={props.username} company={document.company} client={document.client} setDocVisible={setViewDocVisible} setCreateVisible={setProgressDoc} address={document.address} customer={customer} service={document.service} totalPrice={document.totalPrice} companyPhone={props.companyPhone} companyEmail={props.companyEmail} companyAddress={props.companyAddress} lineItems={document.line_items} customFields={document.custom_fields} notes={document.notes}/>}
+                               {viewDocVisible == document.id && <ViewQuote lineItems={document.line_items} customFields={document.custom_fields} options={document.fields} signee={props.username} company={props.company} customer={customer} address={props.address} setCreateVisible={setCreateVisible} setDocVisible={setViewDocVisible} service={document.service} notes={document.notes} companyPhone={props.companyPhone} companyEmail={props.companyEmail} companyAddress={props.companyAddress} />}
+                               {progressDoc === document.id && <NewContract options={document.fields} type={document.type}  signee={props.username} company={document.company} client={document.client} setDocVisible={setViewDocVisible} setCreateVisible={setProgressDoc} address={document.address} customer={customer} service={document.service} totalPrice={document.totalPrice} companyPhone={props.companyPhone} companyEmail={props.companyEmail} companyAddress={props.companyAddress} lineItems={document.line_items} customFields={document.custom_fields} notes={document.notes}/>}
                              </div>
                            </>
                              )
                         case "contract":
                           return (
                             <>
-      
+
                              <div className="m-4 flex flex-col">
                                <p className="text-xl capitalize"><FontAwesomeIcon icon={faToolbox}/> {document.service} | {document.type}</p>
                                <p className="text-md"><span>{new Date(document.created_at).toDateString()}</span><span> {new Date(document.created_at).toLocaleTimeString(navigator.language, {hour: '2-digit', minute:'2-digit'})}</span></p>
                                <div className="flex gap-1">
                                <button
-                                    onClick={() => setViewDocVisible(document.created_at)}
+                                    onClick={() => setViewDocVisible(document.id)}
                                     className="bg-green-200"
                                   >
                                     View
                                   </button>
                                  <button
-                                    onClick={() => setInstructionsDocVisible(document.created_at)}
+                                    onClick={() => setInstructionsDocVisible(document.id)}
                                     className="bg-green-200"
                                   >
                                     Job Instructions
                                   </button>
                                   </div>
-                                  
-                               {viewDocVisible == document.created_at && <ViewContract options={document.fields} customFields={document.custom_fields} signee={props.username} company={document.company} client={document.client} setDocVisible={setViewDocVisible} setCreateVisible={setCreateVisible} address={document.address} customer={customer} service={document.service} totalPrice={document.totalPrice} companyPhone={props.companyPhone} companyEmail={props.companyEmail} companyAddress={props.companyAddress}/>}
-                               {instructionsDocVisible == document.created_at && <ViewInstructions options={document.fields}  company={document.company} client={document.client} setDocVisible={setInstructionsDocVisible} address={document.address} customer={customer} service={document.service} companyPhone={props.companyPhone} companyEmail={props.companyEmail} companyAddress={props.companyAddress} instructions={document.instructions}/>}
+
+                               {viewDocVisible === document.id && <ViewContract options={document.fields} customFields={document.custom_fields} signee={props.username} company={document.company} client={document.client} setDocVisible={setViewDocVisible} setCreateVisible={setCreateVisible} address={document.address} customer={customer} service={document.service} totalPrice={document.totalPrice} companyPhone={props.companyPhone} companyEmail={props.companyEmail} companyAddress={props.companyAddress}/>}
+                               {instructionsDocVisible === document.id && <ViewInstructions options={document.fields} company={document.company} client={document.client} setDocVisible={setInstructionsDocVisible} address={document.address} customer={customer} service={document.service} companyPhone={props.companyPhone} companyEmail={props.companyEmail} companyAddress={props.companyAddress} instructions={document.instructions}/>}
 
                              </div>
                            </>
@@ -319,10 +273,10 @@ export default function Customers(props) {
               )
             }
             </div>
-                 
+
                  </div>
-              
-                 {createVisible == customer.client_id && <NewQuote signee={props.username} company={props.company} customer={customer} client={customer.name} setCreateVisible={setCreateVisible} address={customer.address} setCustomerData={props.setCustomerData} companyPhone={props.companyPhone} companyEmail={props.companyEmail} companyAddress={props.companyAddress}/>}
+
+              { createVisible === customer.client_id && <NewQuote signee={props.username} company={props.company} customer={customer} client={customer.name} setCreateVisible={setCreateVisible} address={customer.address} setCustomerData={props.setCustomerData} companyPhone={props.companyPhone} companyEmail={props.companyEmail} companyAddress={props.companyAddress}/>}
             </>
           ))}
         </div>
@@ -337,7 +291,7 @@ export default function Customers(props) {
 
       </>
       </div>
-      
+
   )
 }
 
