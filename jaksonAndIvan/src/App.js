@@ -16,6 +16,13 @@ import Calculations from './pages/calculations/Calculations';
 import Products from './pages/products/Products';
 import AddProduct from './components/products/AddProduct/AddProduct';
 import SavedCalculations from './components/calculations/Cards/SavedCalculations';
+import Gutters from "./pages/calculations/Gutters";
+import Walls from "./pages/calculations/Walls";
+import HotTubPad from "./pages/calculations/HotTubPad";
+import LaticalPanel from "./pages/calculations/LaticalPanel";
+import HomeWrap from "./pages/calculations/HomeWrap";
+import VinylSiding from "./pages/calculations/VinylSiding";
+import Corners from "./pages/calculations/Corners";
 
 const AdminPage = lazy(() => import(/* webpackChunkName: "AdminPage" */ './pages/AdminPage'));
 
@@ -168,6 +175,13 @@ const App = () => {
           <Route exact path="/" component={Home} />
           <Route exact path="/check-status" component={InvalidStatus} />
           <Route exact path="/check-role" component={InvalidRole} />
+          <Route exact path="/calculators/gutters" component={Gutters} />
+          <Route exact path="/calculators/walls" component={Walls} />
+          <Route exact path="/calculators/hotTubPad" component={HotTubPad} />
+          <Route exact path="/calculators/laticalPanel" component={LaticalPanel} />
+          <Route exact path="/calculators/homeWrap" component={HomeWrap} />
+          <Route exact path="/calculators/vinylSiding" component={VinylSiding} />
+          <Route exact path="/calculators/corners" component={Corners} />
           <Route exact path="/calculations" component={Calculations} />
           <Route exact path={"/products"} component={Products}/>
           <Route exact path={'/products/edit/:id'} component={AddProduct}/>
