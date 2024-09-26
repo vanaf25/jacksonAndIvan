@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { CalculationDocument, Calculator } from './schemas/calculation.schema';
-import { entryPointDto } from './dto/calculation.dto';
+import { Injectable } from "@nestjs/common";
+import { InjectModel } from "@nestjs/mongoose";
+import { Model } from "mongoose";
+import { CalculationDocument, Calculator } from "./schemas/calculation.schema";
+import { entryPointDto } from "./dto/calculation.dto";
 
 @Injectable()
 export class AppService {
@@ -56,7 +56,6 @@ export class AppService {
     const S3 = O * 2;
     const S4 = S2 + S3;
     const S = S4 + 2;
-    console.log('S:', S);
     // Sole Plate Quantity
     //const Y1 = L / P;
     //const Y = Math.ceil(Y1);
@@ -69,7 +68,7 @@ export class AppService {
     const T1 = G * O;
     const T2 = T1 / 12;
     const T = Math.round(T2);
-    console.log('T:', T);
+    console.log("T:", T);
     // Wall Window Plate Quantity
     //const R = T / P;
 
@@ -94,7 +93,7 @@ export class AppService {
     // Wall Plate Fastener Quantity
     const X1Wall = L + T;
     const WallPlateFastenerQuantity = X1Wall * 2;
-    console.log('wall: ', WallPlateFastenerQuantity);
+    console.log("wall: ", WallPlateFastenerQuantity);
     const HeaderNailQuantity = K * 3;
     return {
       HeaderNailQuantity,
