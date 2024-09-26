@@ -39,9 +39,6 @@ export default function Header() {
       <NavLink className={styles.navTxt} to="/products">
        Products
       </NavLink>
-      <NavLink className={styles.navTxt} to="/savedCalculations">
-        Saved calculations
-      </NavLink>
       {!isLoggedIn ? (
         <NavLink className={classes} to="/sign-in">
           SignIn

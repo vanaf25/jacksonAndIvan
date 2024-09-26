@@ -15,7 +15,6 @@ import PrivateRoute from './components/PrivateRoute';
 import Calculations from './pages/calculations/Calculations';
 import Products from './pages/products/Products';
 import AddProduct from './components/products/AddProduct/AddProduct';
-import SavedCalculations from './components/calculations/Cards/SavedCalculations';
 import Gutters from "./pages/calculations/Gutters";
 import Walls from "./pages/calculations/Walls";
 import HotTubPad from "./pages/calculations/HotTubPad";
@@ -208,7 +207,6 @@ const App = () => {
           <Route exact path={"/products"} component={Products}/>
           <Route exact path={'/products/edit/:id'} component={AddProduct}/>
           <Route exact path={'/products/create'} component={AddProduct}/>
-          <Route exact path={'/savedCalculations'} component={SavedCalculations}/>
           <Route exact path="/sign-up" component={SignUp} />
           <Route exact path="/sign-in" component={SignIn} />
 
