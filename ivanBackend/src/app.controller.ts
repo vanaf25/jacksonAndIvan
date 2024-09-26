@@ -32,6 +32,50 @@ export class AppController {
   corners(@Body() itemDto) {
     return this.appService.corners(itemDto);
   }
+  @Post('sheetSiding')
+  sheetSiding(@Body() itemDto) {
+    return this.appService.sheetSiding(itemDto);
+  }
+  @Post('soffit')
+  soffit(@Body() itemDto) {
+    return this.appService.soffit(itemDto);
+  }
+  @Post('pergolaShade')
+  pergolaShade(@Body() itemDto) {
+    return this.appService.pergolaShade(itemDto);
+  }
+  @Post('friezeBoard')
+  friezeBoard(@Body() itemDto) {
+    return this.appService.friezeBoard(itemDto);
+  }
+  @Post('plankSiding')
+  plankSiding(@Body() itemDto) {
+    return this.appService.plankSiding(itemDto);
+  }
+  @Post('fascia')
+  fascia(@Body() itemDto) {
+    return this.appService.fascia(itemDto);
+  }
+  @Post('stuccoWallCovering')
+  stuccoWallCovering(@Body() itemDto) {
+    return this.appService.stuccoWallCovering(itemDto);
+  }
+  @Post('brickWallCovering')
+  brickWallCovering(@Body() itemDto) {
+    return this.appService.brickWallCovering(itemDto);
+  }
+  @Post('porchCeiling')
+  porchCeiling(@Body() itemDto) {
+    return this.appService.porchCeiling(itemDto);
+  }
+  @Post('stairFraming')
+  starFraming(@Body() itemDto) {
+    return this.appService.starFraming(itemDto);
+  }
+  @Post('fencing')
+  fencing(@Body() itemDto) {
+    return this.appService.fencing(itemDto);
+  }
   @Get()
   get() {
     return this.appService.getItems();

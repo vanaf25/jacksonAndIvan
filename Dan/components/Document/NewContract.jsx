@@ -26,11 +26,20 @@ export default function NewContract(props) {
   async function addDocument() {
     try {
       // Get the authenticated use
-  
+        console.log('props:',props);
       // Insert a new document into the database
       const { data, error } = await supabase
         .from('documents')
-        .insert([{ created_by: user.id, totalPrice: totalPrice, fields: props.options, service: props.service, client: props.customer.name, client_address: props.customer.address, company: props.company, type: "contract", custom_fields: props.customFields, line_items: props.lineItems, notes: props.notes, client_id: props.customer.client_id, instructions: jobNotes }])
+        .insert([{ created_by: user.id, totalPrice: totalPrice,
+            fields: props.options,
+            service: props.service, client: props.customer.name,
+            client_address: props.customer.address,
+            company: props.company, type: "contract",
+            custom_fields: props.customFields,
+            line_items: props.lineItems,
+            notes: props.notes,
+            client_id: props.customer.client_id,
+            instructions: jobNotes }])
         .single()
   
       if (error) {

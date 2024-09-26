@@ -33,7 +33,7 @@ export default function Header() {
       <NavLink className={styles.navTxt} to="/corporate/customer-archives">
         Corporate Manager
       </NavLink>
-      <NavLink className={styles.navTxt} to="/calculations">
+      <NavLink className={styles.navTxt} to="/calculators">
         Calculators
       </NavLink>
       <NavLink className={styles.navTxt} to="/products">
