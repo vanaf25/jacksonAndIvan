@@ -1,7 +1,6 @@
 import React from 'react';
 
 const CustomerDetails = ({customer,...rest}) => {
-    console.log(customer.city,customer.state,customer.zip);
     return (
         <div {...rest}>
             <h3>Customer info</h3>

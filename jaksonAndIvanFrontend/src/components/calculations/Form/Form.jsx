@@ -40,8 +40,6 @@ const FormCreator = ({inputFields,result,url}) => {
       e.preventDefault();
     }
   };
-
-
   return (
     <>
       <Paper

@@ -922,7 +922,6 @@ export const contractData = [
       },
     ],
   },
-
   {
     name: 'Porch and Cover',
     fields: [
